@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+DictionaryQuery <|-- Dictionary
+DictionaryQuery <|-- DictionaryService
+Dictionary o--> DictionaryService
+Dictionary <--* RandomGuesser: composition
+Dictionary <--* SmartGuesser: composition
+DictionaryService <--* ManualGuesser : composition
+
+interface DictionaryQuery{
+guessWord(String query)
+}
+
+class Dictionary {
+guessWord(String query)
+}
+
+class DictionaryService {
+guessWord(String query)
+}
+
+class ManualGuesser {
+    - DictionaryQuery dictionaryQuery
+    +getGuess()
+}
+
+class SmartGuesser {
+    +getGuess()
+}
+
+class RandomGuesser {
+    +getGuess()
+}
+
+@enduml

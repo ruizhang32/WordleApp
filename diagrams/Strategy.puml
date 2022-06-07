@@ -1,0 +1,28 @@
+@startuml
+Guesser <|-- ManualGuesser
+Guesser <|-- SmartGuesser
+Guesser <|-- RandomGuesser
+App o-- Guesser
+
+class App{
+
+}
+
+abstract class Guesser{
+    +getGuess()
+}
+
+class ManualGuesser {
+    +getGuess()
+}
+
+class SmartGuesser {
+    +getGuess()
+}
+
+class RandomGuesser {
+    +getGuess()
+}
+
+
+@enduml

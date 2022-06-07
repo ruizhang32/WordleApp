@@ -1,0 +1,168 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+GameRecordAccessor <--* App : composition
+UserAccessor <--* App : composition
+
+DictionaryQuery <|-- Dictionary
+DictionaryService <--* Dictionary : uses
+DictionaryQuery <|-- DictionaryService
+DictionaryResponse -- Dictionary: builds
+
+ColourCoder o--> Wordle : against
+Game *--> Guesser : with
+Game *--> User : plays
+Game *--> Wordle : against
+Game -- GameRecord: records
+Guess --> Wordle : association
+Guesser --> Wordle : association
+GuessImpl --|> Guess
+
+Guesser <|-- ManualGuesser
+Guesser <|-- SmartGuesser
+Guesser <|-- RandomGuesser
+Dictionary <--* RandomGuesser: helps
+Dictionary <--* SmartGuesser: helps
+DictionaryService <--* ManualGuesser : helps
+ColourCoder <--* ManualGuesser: composition
+SmartGuesser *--> Knowledge: composition
+
+class GameRecordAccessor {
+    - SessionFactory sessionFactory
+    + GameRecord getGameRecordById(Long gameRecordId)
+    + List<GameRecord> getHighscores()
+    + Long persistGameRecord(GameRecord gameRecord)
+    + void deleteGameRecordById(Long gameRecordId)
+}
+
+class UserAccessor {
+    - SessionFactory sessionFactory
+    + User getUserByName(String name)
+    + User getUserById(Long userId)
+    + Long persistUser(User user)
+    + void removeUserById(Long userId)
+}
+
+class User{
+    - Long userId
+    - String userName
+    - private List<GameRecord> gameRecords
+    + Long getUserId()
+    + void setUserId(Long userId)
+    + String getUserName()
+    + void setUserName(String name)
+}
+
+class GameRecord {
+    - Long gameRecordId
+    - User user
+    - Date timestamp
+    - String word
+    - int numGuesses
+    + GameRecord()
+    + Long getGameRecordId()
+    + void setGameRecordId(Long gameRecordId)
+    + User getUser()
+    + void setUser(User user)
+    + String getWord()
+    + void setWord(String word)
+    + int getNumGuesses()
+    + void setNumGuesses(int numGuesses)
+    + Date getTimestamp()
+    + void setTimestamp(Date date)
+}
+
+interface DictionaryQuery{
+    guessWord(String query)
+}
+
+class Dictionary {
+    - DictionaryService dictionaryService;
+    + guessWord(String query)
+}
+
+class DictionaryService {
+    guessWord(String query)
+}
+
+class DictionaryResponse{
+    -List<String> words
+    +List<String> getWords()
+    +void setWords(List<String> words)
+ }
+
+abstract class Guess {
+    # String proposition
+    # Wordle wordle
+    + {abstract} String getProposition()
+    + {abstract} boolean isCorrect()
+}
+
+class GuessImpl{
+    + String getProposition()
+    + boolean isCorrect()
+}
+
+abstract class Guesser {
+    # Wordle wordle;
+    # int numGuesses
+    + {abstract} Guess getGuess()
+    + int getNumGuesses()
+}
+
+class ManualGuesser {
+    - DictionaryQuery dictionaryQuery
+    - ColourCoder colourCoder
+    + getGuess()
+    + Stack<Guess> getGuesses()
+}
+
+class SmartGuesser {
+    - Random random
+    - List<String> words
+    + getGuess()
+}
+
+class RandomGuesser {
+    - Random random
+    - Knowledge knowledge
+    - List<String> words
+    + getGuess()
+}
+
+class Knowledge {
+    - char[] knownInPlace = new char[5]
+    - char[] knownOutOfPlace = new char[5]
+    - char[] knownNotInWord
+    + void update(Guess guess, String word)
+    + char[] getKnownInPlace()
+    + char[] getKnownOutOfPlace()
+    + char[] getKnownNotInWord()x
+}
+
+class App{
+    - GameRecordAccessor gameRecordAccessor
+    - UserAccessor userAccessor
+    + {static} void main(String[] args)
+    + void runCli()
+}
+
+class Game {
+    - User user;
+    - Guesser guesser;
+    - Wordle wordle;
+    + GameRecord playGame()
+}
+
+class Wordle {
+    - String word;
+    + boolean check(String proposition)
+    + String getWord()
+}
+
+class ColourCoder{
+    - Wordle wordle;
+    + String getColourCodedString(String query)
+}
+
+@enduml

@@ -1,0 +1,16 @@
+U3 Color Coding Guesses
+AC 1 - When a player gets the correct word, it should be displayed as all green characters
+AC 2 - When a player guesses a word with some correct, out-of-place, and incorrect characters the colour coding informs
+       them of this with green for correct characters, yellow for characters that exist in the word but are in the
+       wrong position, and gray for characters that are not in the word.
+
+U4 Playing the game manually
+AC 1 - When playing the game with manual guesses each guess correctly adds to the number of guesses
+AC 2 - When playing the game, I cannot make a guess with a 4-letter word
+AC 3 - When playing the game, I can ask for a hint and see the possible words up to a maximum of 5
+
+U5 Undo and Redo guesses
+AC 1 - When playing the game manually, after making a guess I can undo my guess. And this guess will be removed from my guesses and my number of guesses will be reduced
+AC 2 - If I have any number of undone guess I can redo these operations in reverse order (last in first out) to return to the state I was at
+AC 3 - If I have an undone guess, when I make another guess I can no longer redo my last undo operation
+AC 4 - If I have a redone guess, when I undo this redone guess is undone again

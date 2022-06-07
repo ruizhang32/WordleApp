@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+Memento --* CareTaker
+Memento <..  ManualGuesser
+
+class Memento {
+    - Stack<Guess> guessStack
+    + Memento(Stack<Guess> guessStack, int numGuesses)
+    + Stack<Guess> getGuessStack()
+    + int getNumGuesses()
+}
+
+class ManualGuesser {
+    - Stack<Guess> guessStack
+    + Memento saveStateToMemento()
+    + void getStateFromMemento(Memento memento)
+}
+
+class CareTaker{
+    - List<Memento> mementoList
+    + void add(Memento memento)
+    + Memento getMemento(int numGuesses)
+}
+
+@enduml
